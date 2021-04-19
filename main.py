@@ -1,5 +1,5 @@
 import camara
-import sensores
+import sensores as sens
 import control
 import actuadores
 
@@ -11,9 +11,10 @@ def main():
         info = camara.foto()
         if info:
             print("QR: ", info)
-        #sensores
-        #tomar decisiones con los datos (control)
-        #actuadores
+            #sensores
+            print("sensores: ", sens.data(sens.trig, sens.echo))
+            #tomar decisiones con los datos (control)
+            #actuadores
 
 if __name__ == '__main__':
     main()

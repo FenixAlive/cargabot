@@ -1,13 +1,14 @@
 import RPi.GPIO as GPIO
 import time
 
-trig = 21
-echo = 20
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(trig, GPIO.OUT)
-GPIO.setup(echo, GPIO.IN)
+trig = [21, 6, 19]
+echo = [20, 5, 13]
+for i in range(len(trig)):
+    GPIO.setup(trig[i], GPIO.OUT)
+    GPIO.setup(echo[i], GPIO.IN)
 
-def dis():
+def dis(trig, echo):
     GPIO.output(trig, False)
     time.sleep(0.000002)        # 2us
     GPIO.output(trig, True)
@@ -22,8 +23,22 @@ def dis():
     #d = (0.0343/2)*t            # cm/us
     return d
 
+def data(trig, echo):
+    data = []
+    for i in range(len(trig)):
+        data.append(dis(trig[i], echo[i]))
+        time.sleep(0.01)        # 2us
+    return data
+
+
+
+
 if __name__ == '__main__':
     while(1):
-        print(dis()," cm")
+        for i in range(len(trig)):
+            print("Sensor {}: {} cm".format(i, dis(trig[i], echo[i])))
+            time.sleep(0.01)        # 2us
+        time.sleep(0.2)        # 2us
+        print("-------------")
 
 
