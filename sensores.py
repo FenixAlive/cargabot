@@ -10,15 +10,17 @@ for i in range(len(trig)):
     GPIO.setup(trig[i], GPIO.OUT)
     GPIO.setup(echo[i], GPIO.IN)
 
-disMax = 120
+disMax = 0.75
+disMin = 0.05
 nSen = len(trig)
-nFiltro = 7
-nVeces = 3
+nFiltro = 9
 w = 0.1*np.random.random_sample((nFiltro+1,nSen))
-eta = 0.000007
+eta = 0.02
 data = np.zeros((nFiltro+1, nSen))
+
+
 #toma la distancia de un sensor en especifico
-def dis(utrig, uecho):
+def readSen(utrig, uecho):
     #tiempo para descansar
     GPIO.output(utrig, False)
     time.sleep(0.00005)
@@ -31,32 +33,25 @@ def dis(utrig, uecho):
         t_start = time.time()
     while GPIO.input(uecho) == 1:
         t_end = time.time()
-    distancia = (34300/2)*(t_end-t_start)
-    if distancia < disMax:
-        return distancia
-    else:
-        return disMax
-    return              # cm/s * s
+    return (343/2)*(t_end-t_start)
 
 
-def senData():
-    tdata = np.zeros(nSen)
-    for i in range(nVeces):
-        for i in range(nSen):
-            tdata[i] += dis(trig[i], echo[i])
-    return np.divide(tdata,nVeces)
-
-
-def senOne():
+def distSensores():
     tdata = np.zeros(nSen)
     for i in range(nSen):
-        tdata[i] = dis(trig[i], echo[i])
+        tdata[i] = readSen(trig[i], echo[i])
+        if tdata[i] < disMax and tdata[i] > disMin:
+            tdata[i] = 1-(tdata[i]-disMin)/(disMax-disMin)
+        elif tdata[i] < disMin:
+            tdata[i] = 1
+        else:
+            tdata[i] = 0
     return tdata
 
-def adaData():
+def adaData(dist):
     global data
     data = np.roll(data,shift=1,axis=0) 
-    data[0] = senOne()
+    data[0] = dist
     data[-1] = np.ones(nSen)
     y = np.zeros(nSen)
     #print("---Pesos----")
@@ -76,15 +71,10 @@ def adaData():
 
 
 if __name__ == '__main__':
-    try:
-        for i in range(500):
-            #print("-----Data-----")
-            #print(data)
-            y = adaData()
-            print(np.round_(y,decimals=2))
-            #print("{:.2f}, {:.2f}".format(data[0,6],y[6]))
-        GPIO.cleanup()
-    except:
-        print("error en algo")
-        GPIO.cleanup()
+    for i in range(500):
+        dist = distSensores()
+        y = adaData(dist)
+        #print(np.round_(y,decimals=2))
+        print("{:.6f}, {:.6f}".format(data[0,2],y[2]))
+    GPIO.cleanup()
     

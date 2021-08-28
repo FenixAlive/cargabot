@@ -19,13 +19,20 @@ def foto():
     zero = np.zeros((alto_img, ancho_img))
     norm = cv2.normalize(gray, zero, 0, 255, cv2.NORM_MINMAX)
     blur = cv2.GaussianBlur(norm,(3,3),0)
-    cv2.imshow('blur', blur)
-    cv2.waitKey(1)
-    decoded = decode(blur)
+    qrInfo = decodificarQr(blur)
+    if qrInfo != False:
+        return qrInfo
+    return False
+ #   cv2.imshow('blur', blur)
+ #   cv2.waitKey(1)
+
+
+def decodificarQr(img):
+    decoded = decode(img)
     if decoded:
-        data = decoded[0].data.decode('utf-8')
-        if data == "https://github.com/FenixAlive/cargabot":
-            return decoded[0].rect
+        for decoded_i in decoded:
+            if decoded_i.data.decode('utf-8') == "https://github.com/FenixAlive/cargabot":
+                return decoded_i.rect
     return False
 
 
