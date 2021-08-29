@@ -22,12 +22,7 @@ async def foto():
     zero = np.zeros((alto_img, ancho_img))
     norm = cv2.normalize(gray, zero, 0, 255, cv2.NORM_MINMAX)
     blur = cv2.GaussianBlur(norm,(3,3),0)
-    ti = time.time()
-    qrInfo = decodificarQr(blur)
-    print(time.time()-ti)
-    if qrInfo != False:
-        return qrInfo
-    return False
+    return decodificarQr(blur)
  #   cv2.imshow('blur', blur)
  #   cv2.waitKey(1)
 

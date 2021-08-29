@@ -16,33 +16,32 @@ disMin = 0.05
 nSen = len(trig)
 nFiltro = 9
 w = 0.1*np.random.random_sample((nFiltro+1,nSen))
-eta = 0.02
+eta = 0.009
 data = np.zeros((nFiltro+1, nSen))
 
 
 #toma la distancia de un sensor en especifico
 async def readSen(utrig, uecho):
     #tiempo para descansar
-    ti = time.time()
     GPIO.output(utrig, False)
     await asyncio.sleep(0.0001)
     GPIO.output(utrig, True)
     await asyncio.sleep(0.00001)
     GPIO.output(utrig, False)
+    ti = time.time()
     while GPIO.input(uecho) == 0:
         await asyncio.sleep(0)
-        if(time.time()-ti > 0.05): 
+        if(time.time()-ti > 0.01): 
             return disMax
     t_start = time.time()
     while GPIO.input(uecho) == 1:
         await asyncio.sleep(0)
-        if(time.time()-ti > 0.05): 
+        if(time.time()-t_start > 0.01): 
             return disMax
     return (343/2)*(time.time()-t_start)
 
 
 async def distSensores():
-    #tdata = np.zeros(nSen)
     tdata = []
     for i in range(nSen):
         tdata.append(asyncio.create_task(readSen(trig[i], echo[i])))
@@ -55,6 +54,7 @@ async def distSensores():
         else:
             tdata[i] = 0
     return tdata
+
 
 def adaData(dist):
     global data
@@ -79,8 +79,8 @@ def adaData(dist):
 
 
 if __name__ == '__main__':
-    for i in range(5000):
-        ti = time.time()
+    for i in range(1000):
+        #ti = time.time()
         dist = asyncio.run(distSensores())
         y = adaData(dist)
         #print(time.time()-ti)
