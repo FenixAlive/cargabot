@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import numpy as np
+import asyncio
 
 # Inicializamos gpio para tomar data de sensores
 GPIO.setmode(GPIO.BCM)
@@ -20,26 +21,33 @@ data = np.zeros((nFiltro+1, nSen))
 
 
 #toma la distancia de un sensor en especifico
-def readSen(utrig, uecho):
+async def readSen(utrig, uecho):
     #tiempo para descansar
+    ti = time.time()
     GPIO.output(utrig, False)
-    time.sleep(0.00005)
+    await asyncio.sleep(0.0001)
     GPIO.output(utrig, True)
-    time.sleep(0.00001) 
+    await asyncio.sleep(0.00001)
     GPIO.output(utrig, False)
-    t_start = time.time()
-    t_end = time.time()
     while GPIO.input(uecho) == 0:
-        t_start = time.time()
+        await asyncio.sleep(0)
+        if(time.time()-ti > 0.05): 
+            return disMax
+    t_start = time.time()
     while GPIO.input(uecho) == 1:
-        t_end = time.time()
-    return (343/2)*(t_end-t_start)
+        await asyncio.sleep(0)
+        if(time.time()-ti > 0.05): 
+            return disMax
+    return (343/2)*(time.time()-t_start)
 
 
-def distSensores():
-    tdata = np.zeros(nSen)
+async def distSensores():
+    #tdata = np.zeros(nSen)
+    tdata = []
     for i in range(nSen):
-        tdata[i] = readSen(trig[i], echo[i])
+        tdata.append(asyncio.create_task(readSen(trig[i], echo[i])))
+    tdata = await asyncio.gather(*tdata)
+    for i in range(nSen):
         if tdata[i] < disMax and tdata[i] > disMin:
             tdata[i] = 1-(tdata[i]-disMin)/(disMax-disMin)
         elif tdata[i] < disMin:
@@ -71,10 +79,12 @@ def adaData(dist):
 
 
 if __name__ == '__main__':
-    for i in range(500):
-        dist = distSensores()
+    for i in range(5000):
+        ti = time.time()
+        dist = asyncio.run(distSensores())
         y = adaData(dist)
-        #print(np.round_(y,decimals=2))
-        print("{:.6f}, {:.6f}".format(data[0,2],y[2]))
+        #print(time.time()-ti)
+        print(np.round_(y,decimals=2))
+        #print("{:.6f}, {:.6f}".format(data[0,1],y[1]))
     GPIO.cleanup()
     

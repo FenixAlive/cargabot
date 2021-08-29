@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 from pyzbar.pyzbar import decode
+import asyncio
+import time
 
 # se guarda en variable el tamano total de la imagen
 alto_img = 480
@@ -11,7 +13,8 @@ cam.set(3,ancho_img)
 cam.set(4,alto_img)
 
 
-def foto():
+async def foto():
+    await asyncio.sleep(0)
     ok, img = cam.read()
     if not ok:
         return False
@@ -19,7 +22,9 @@ def foto():
     zero = np.zeros((alto_img, ancho_img))
     norm = cv2.normalize(gray, zero, 0, 255, cv2.NORM_MINMAX)
     blur = cv2.GaussianBlur(norm,(3,3),0)
+    ti = time.time()
     qrInfo = decodificarQr(blur)
+    print(time.time()-ti)
     if qrInfo != False:
         return qrInfo
     return False
@@ -38,5 +43,11 @@ def decodificarQr(img):
 
 if __name__ == '__main__':
     if cam.read()[0]:
-        while(1):
-            print(foto())
+        i = 0
+        while(i < 1000):
+            i+=1
+            #ti=time.time()
+            asyncio.run(foto())
+            #print(time.time()-ti)
+            #print(asyncio.run(foto()))
+
