@@ -11,7 +11,7 @@ async def main():
         return False
     constCam, varCam = control.defineVariablesControlCam()
     i=0
-    while(i < 5000):
+    while(i < 1000):
         i += 1
         infoto = asyncio.create_task(camara.foto())
         rawDist = await sens.distSensores()
@@ -27,7 +27,10 @@ async def main():
 
         vr = vrCam*varSen + vrSen
         vl = vlCam*varSen + vlSen
-        actuadores.actua(vr, vl)
+        #por ahora que nos falta un sensor
+        vr = vrCam
+        vl = vlCam
+        actuadores.actua(vr, vl, dist, qrInfo)
 
 
 if __name__ == '__main__':
