@@ -12,7 +12,7 @@ def defineVariablesControlCam():
             "etaV": np.array([0.0001, 0.0001]),
             "etaW": np.array([0.0001, 0.0001]),
             "centroDesesado": 640/2,
-            "distanciaDesesada": 130,
+            "tamDesesado": 200,
         },
         #varCam
         {
@@ -28,7 +28,7 @@ def defineVariablesControlCam():
 
 def controlCamara(qrInfo, constCam, varCam):
     centro = qrInfo.left + qrInfo.width/2
-    errorV = constCam["distanciaDesesada"]-qrInfo.height
+    errorV = constCam["tamDesesado"]-qrInfo.height
     errorW = constCam["centroDesesado"] - centro
     varCam["e"] = np.array([errorV, errorW])
     errorD = np.divide(varCam["e"]-varCam["eOld"], time.time()-varCam["tAnt"])

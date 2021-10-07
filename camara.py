@@ -21,10 +21,9 @@ async def foto():
     gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     zero = np.zeros((alto_img, ancho_img))
     norm = cv2.normalize(gray, zero, 0, 255, cv2.NORM_MINMAX)
-    blur = cv2.GaussianBlur(norm,(3,3),0)
-    return decodificarQr(blur)
- #   cv2.imshow('blur', blur)
- #   cv2.waitKey(1)
+    #blur = cv2.GaussianBlur(norm,(3,3),0)
+    cv2.waitKey(1)
+    return decodificarQr(norm)
 
 
 def decodificarQr(img):
@@ -41,8 +40,8 @@ if __name__ == '__main__':
         i = 0
         while(i < 1000):
             i+=1
-            #ti=time.time()
+            ti=time.time()
             asyncio.run(foto())
-            #print(time.time()-ti)
+            print(time.time()-ti)
             #print(asyncio.run(foto()))
 

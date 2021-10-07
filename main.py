@@ -30,7 +30,7 @@ async def main():
         #por ahora que nos falta un sensor
         vr = vrCam
         vl = vlCam
-        actuadores.actua(vr, vl, dist, qrInfo)
+        actuadores.actua(vr, vl)
 
 
 if __name__ == '__main__':

@@ -5,8 +5,8 @@ import asyncio
 
 # Inicializamos gpio para tomar data de sensores
 GPIO.setmode(GPIO.BCM)
-trig = [5, 10, 27, 4, 7, 9, 20] #26
-echo = [6, 11, 22, 17, 25, 8, 16] #21
+trig = [5, 10, 27, 4, 7, 9, 20, 26]
+echo = [6, 11, 22, 17, 25, 8, 16, 21]
 for i in range(len(trig)):
     GPIO.setup(trig[i], GPIO.OUT)
     GPIO.setup(echo[i], GPIO.IN)
