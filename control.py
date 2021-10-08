@@ -37,11 +37,11 @@ def controlCamara(qrInfo, constCam, varCam):
     w = errorW * varCam["wW"][0] + errorD[1]*varCam["wW"][1]
     #actualiza pesos
     #revisión de pesos y velocidad
-    varCam["wV"][0] = varCam["wV"][0]+constCam["etaV"][0]*v*errorV
-    varCam["wV"][1] = varCam["wV"][1]+constCam["etaV"][1]*v*errorD[0]
-    varCam["wW"][0] = varCam["wW"][0]+constCam["etaW"][0]*w*errorV
-    varCam["wW"][1] = varCam["wW"][1]+constCam["etaW"][1]*w*errorD[1]
-    varCam["eOld"] = varCam["e"]
+   # varCam["wV"][0] = varCam["wV"][0]+constCam["etaV"][0]*v*errorV
+    #varCam["wV"][1] = varCam["wV"][1]+constCam["etaV"][1]*v*errorD[0]
+    #varCam["wW"][0] = varCam["wW"][0]+constCam["etaW"][0]*w*errorV
+    #varCam["wW"][1] = varCam["wW"][1]+constCam["etaW"][1]*w*errorD[1]
+    #varCam["eOld"] = varCam["e"]
     #velocidad ruedas
     vr = (2*v + w*constCam["L"])/(2*constCam["R"])
     vl = (2*v - w*constCam["L"])/(2*constCam["R"])
@@ -49,7 +49,7 @@ def controlCamara(qrInfo, constCam, varCam):
 
 
 def controlSensores(dist):
-    Kp_R = [8, -3, -4, 6, 3 -2]
+    Kp_R = [8, -3, -4, 6, 3, -2]
     Kp_L = [-4, -3, 8, -2, 3, 6]
     varSen = 0
     vr = 0
@@ -59,7 +59,7 @@ def controlSensores(dist):
             varSen = 0.85
         elif dist[i] > varSen:
             varSen = dist[i]
-        vr += dist[i]*Kp_R[i]
-        vl += dist[i]*Kp_L[i]
+        vr += dist[i]*Kp_R[i]*10
+        vl += dist[i]*Kp_L[i]*10
     varSen = 1-(varSen-0)/(0.85-0)
     return [vr, vl, varSen]

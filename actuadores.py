@@ -6,7 +6,7 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
 #enable pin GPIO 26
-enable_pin = 26
+enable_pin = 16
 
 GPIO.setup(enable_pin, GPIO.OUT)
 #motors off at start
@@ -50,6 +50,9 @@ def actua(vr, vl):
             v[i] = 100
         pwm[i].ChangeDutyCycle(v[i])
 
+def enable_motors(val):
+    GPIO.output(enable_pin, val)
+
 
 def verActua(vr, vl, sens, qrInfo):
     os.system("clear")
@@ -75,7 +78,8 @@ def verActua(vr, vl, sens, qrInfo):
     print("")
 
 if __name__ == '__main__':
+    GPIO.output(enable_pin, GPIO.HIGH)
     for i in range(-100,101):
         actua(i,i)
-        time.sleep(0.3)
+        time.sleep(0.1)
 

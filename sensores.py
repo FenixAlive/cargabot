@@ -65,6 +65,7 @@ def adaData(dist):
     y = np.zeros(nSen)
     #print("---Pesos----")
     #print(w)
+    senMax = 0
     for n in range(nSen):
         #print("sensor: {}".format(n))
         x = data[:,n]
@@ -76,7 +77,9 @@ def adaData(dist):
         e = data[0,n]-y[n]
         #print(e)
         w[:,n] = w[:,n] + eta*e*x
-    return y
+        if y[n] > senMax:
+            senMax = y[n]
+    return [y, senMax]
 
 
 if __name__ == '__main__':

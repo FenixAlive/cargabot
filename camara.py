@@ -30,7 +30,7 @@ def decodificarQr(img):
     decoded = decode(img)
     if decoded:
         for decoded_i in decoded:
-            if decoded_i.data.decode('utf-8') == "https://github.com/FenixAlive/cargabot":
+            if decoded_i.data.decode('utf-8') == "git@github.com:FenixAlive/cargabot.git":
                 return decoded_i.rect
     return False
 
