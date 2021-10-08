@@ -37,40 +37,11 @@ def controlCamara(qrInfo, constCam, varCam):
     w = errorW * varCam["wW"][0] + errorD[1]*varCam["wW"][1]
     #actualiza pesos
     #revisión de pesos y velocidad
-    acelMax = [1,5]
-    velMax = [3, 5]
-    porcDesc = [1.05, 1.05]
-    if abs(v-varCam["vAnt"][0]) > acelMax[0]:
-        varCam["wV"][0] /= porcDesc[0]
-        varCam["wV"][1] /= porcDesc[0]
-        if(v > 0 and varCam["vAnt"][0] > 0) or (v < 0 and varCam["vAnt"][0] < 0):
-            v = varCam["vAnt"][0]*porcDesc[0]
-        else:
-            v=0
-    else:
-        varCam["wV"][0] = varCam["wV"][0]+constCam["etaV"][0]*v*errorV
-        varCam["wV"][1] = varCam["wV"][1]+constCam["etaV"][1]*v*errorD[0]
-    if v > velMax[0]:
-        v = velMax[0]
-    elif v < -velMax[0]:
-        v = -velMax[0]
-    if abs(w-varCam["vAnt"][1]) > acelMax[1]:
-        varCam["wW"][0] /= porcDesc[1]
-        varCam["wW"][1] /= porcDesc[1]
-        if(w > 0 and varCam["vAnt"][1] > 0) or (w < 0 and varCam["vAnt"][1] < 0):
-            w = varCam["vAnt"][1]*porcDesc[1]
-        else:
-            w=0
-    else:
-        varCam["wW"][0] = varCam["wW"][0]+constCam["etaW"][0]*w*errorV
-        varCam["wW"][1] = varCam["wW"][1]+constCam["etaW"][1]*w*errorD[1]
-    if w > velMax[1]:
-        w = velMax[1]
-    elif w < -velMax[1]:
-        w = -velMax[1]
-    #guardo parametros
+    varCam["wV"][0] = varCam["wV"][0]+constCam["etaV"][0]*v*errorV
+    varCam["wV"][1] = varCam["wV"][1]+constCam["etaV"][1]*v*errorD[0]
+    varCam["wW"][0] = varCam["wW"][0]+constCam["etaW"][0]*w*errorV
+    varCam["wW"][1] = varCam["wW"][1]+constCam["etaW"][1]*w*errorD[1]
     varCam["eOld"] = varCam["e"]
-    varCam["vAnt"] = [v, w]
     #velocidad ruedas
     vr = (2*v + w*constCam["L"])/(2*constCam["R"])
     vl = (2*v - w*constCam["L"])/(2*constCam["R"])
@@ -78,8 +49,8 @@ def controlCamara(qrInfo, constCam, varCam):
 
 
 def controlSensores(dist):
-    Kp_R = [10, -2, -5, -3, 10, 2, 2, -3]
-    Kp_L = [-3, -5, -2, 10, -3, 2, 2, 10]
+    Kp_R = [8, -3, -4, 6, 3 -2]
+    Kp_L = [-4, -3, 8, -2, 3, 6]
     varSen = 0
     vr = 0
     vl = 0
