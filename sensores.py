@@ -83,10 +83,10 @@ def adaData(dist):
 
 
 if __name__ == '__main__':
-    for i in range(1000):
+    for i in range(3000):
         #ti = time.time()
         dist = asyncio.run(distSensores())
-        y = adaData(dist)
+        y,senMax = adaData(dist)
         #print(time.time()-ti)
         print(np.round_(y,decimals=2))
         #print("{:.6f}, {:.6f}".format(data[0,1],y[1]))
