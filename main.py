@@ -11,30 +11,31 @@ async def main():
         print("fallo al detectar camara")
         return False
     constCam, varCam = control.defineVariablesControlCam()
-    actuadores.enable_motors(GPIO.HIGH)
     i=0
-    while(i < 1000):
+    while(True):
         i += 1
         infoto = asyncio.create_task(camara.foto())
         rawDist = await sens.distSensores()
         dist, senMax = sens.adaData(rawDist)
-        print(dist)
+        #print(dist)
         #control de sensores
         vrSen, vlSen, varSen = control.controlSensores(dist)
         qrInfo = await infoto
-        print(qrInfo)
+        #print(qrInfo)
         if qrInfo != False:
             vrCam, vlCam, varCam = control.controlCamara(qrInfo, constCam, varCam)
         else:
             vrCam = 0
             vlCam = 0
-        if senMax > 0.3:
+        if senMax > 0.1 or qrInfo != False:
             actuadores.enable_motors(GPIO.HIGH)
         else:
             actuadores.enable_motors(GPIO.LOW)
         vr = vrCam*varSen + vrSen
         vl = vlCam*varSen + vlSen
-        #por ahora que nos falta un sensor
+        #print(vlSen, vrSen)
+        #print(vl, vr)
+        print(vlCam, vrCam, vlSen, vrSen, vl, vr)
         actuadores.actua(vr, vl)
 
 

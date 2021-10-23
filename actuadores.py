@@ -33,9 +33,7 @@ for i in range(0,2):
 
 #setup pins for direction in H bridge
 def actua(vr, vl):
-    vr= vr+0.5
-    if vl >= 100:
-        vl = 100
+    tope = 80
     v = [vr, vl]
     for i in range(0,2):
         if v[i] > 0:
@@ -46,8 +44,8 @@ def actua(vr, vl):
             GPIO.output(direction[i][1], GPIO.HIGH)
             v[i] = abs(v[i])
 
-        if v[i] >= 100:
-            v[i] = 100
+        if v[i] > tope:
+            v[i] = tope
         pwm[i].ChangeDutyCycle(v[i])
 
 def enable_motors(val):
@@ -81,5 +79,6 @@ if __name__ == '__main__':
     GPIO.output(enable_pin, GPIO.HIGH)
     for i in range(-100,101):
         actua(i,i)
+        print(i,i)
         time.sleep(0.1)
 

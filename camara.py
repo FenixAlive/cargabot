@@ -12,6 +12,7 @@ cam = cv2.VideoCapture(0)
 cam.set(3,ancho_img)
 cam.set(4,alto_img)
 
+qrDecoder = cv2.QRCodeDetector()
 
 async def foto():
     await asyncio.sleep(0)
@@ -22,7 +23,7 @@ async def foto():
     zero = np.zeros((alto_img, ancho_img))
     norm = cv2.normalize(gray, zero, 0, 255, cv2.NORM_MINMAX)
     #blur = cv2.GaussianBlur(norm,(3,3),0)
-    cv2.waitKey(1)
+    #cv2.waitKey(1)
     return decodificarQr(norm)
 
 
@@ -34,14 +35,28 @@ def decodificarQr(img):
                 return decoded_i.rect
     return False
 
+def decodificarQrCV(img):
+    ti = time.time()
+    global qrDecoder
+    data, bbox, rectImg = qrDecoder.detectAndDecode(img) 
+    print(time.time()-ti)
+
+async def fotoVerde():
+    await asyncio.sleep(0)
+    ok, img = cam.read()
+    if not ok:
+        return False
+    _, segmentada, _ = cv2.split(img)
+    print(segmentada)
+
 
 if __name__ == '__main__':
     if cam.read()[0]:
         i = 0
-        while(i < 1000):
-            i+=1
-            ti=time.time()
-            asyncio.run(foto())
-            print(time.time()-ti)
-            #print(asyncio.run(foto()))
+        asyncio.run(fotoVerde())
+        #while(i < 1000):
+        #    i+=1
+        #    ti=time.time()
+            #asyncio.run(foto())
+        #    print(asyncio.run(foto()))
 

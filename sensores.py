@@ -12,7 +12,7 @@ for i in range(len(trig)):
     GPIO.setup(trig[i], GPIO.OUT)
     GPIO.setup(echo[i], GPIO.IN)
 
-disMax = 0.75
+disMax = 0.3
 disMin = 0.05
 nSen = len(trig)
 nFiltro = 9
