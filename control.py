@@ -1,27 +1,7 @@
-# width ideal 250
 import time
 import numpy as np
 
 def defineVariablesControlCam(como):
-    varCam = [
-        #constCam
-        {
-            "D": 0.15,
-            "L": 0.11,
-            "R": 0.085,
-            "centroDeseado": 0,
-            "tamDeseado": 0,
-        },
-        #varCam
-        {
-            "wV": np.array([0.0, 0.0]),
-            "wW": np.array([0., .0, 0.0]),
-            "e": np.array([0.001, 0.001]),
-            "eOld": np.array([0.001, 0.001]),
-            "tAnt": time.time(),
-            "eAcum": 0,
-        }
-    ]
     if como == "qr":
         varCam = [
         #constCam
@@ -50,12 +30,13 @@ def defineVariablesControlCam(como):
             "L": 0.11,
             "R": 0.085,
             "centroDeseado": 640/2,
-            "tamDeseado": 150,
+            "tamDeseado": 80,
         },
         #varCam
         {
-            "wV": np.array([0.0, 0.0]),
-            "wW": np.array([0., .0, 0.0]),
+            "wV": np.array([0.083, 0.000003]),
+            #"wW": np.array([0., .0, 0.000]),
+            "wW": np.array([0.3, .0007, 0.0001]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),

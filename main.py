@@ -32,7 +32,7 @@ async def main():
         else:
             vrCam = 0
             vlCam = 0
-        if senMax > 0.1 or qrInfo != False or vrCam > 5 or vlCam > 5:
+        if senMax > 0.1 or qrInfo != False or vrCam > 9 or vlCam > 9:
             actuadores.enable_motors(GPIO.HIGH)
         else:
             actuadores.enable_motors(GPIO.LOW)
@@ -40,7 +40,7 @@ async def main():
         vl = vlCam*varSen + vlSen
         #print(vlSen, vrSen)
         #print(vl, vr)
-        print(vlCam, vrCam, vlSen, vrSen, vl, vr)
+        #print(vlCam, vrCam, vlSen, vrSen, vl, vr)
         actuadores.actua(vr, vl)
 
 

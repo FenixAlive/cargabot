@@ -63,9 +63,9 @@ async def foto_grn():
     #img_bn = (Rc-(img[:,:,0].astype(np.float64)))**2+(Gc-(img[:,:,1].astype(np.float64)))**2+(Bc-(img[:,:,2].astype(np.float64)))**2
     #img_bn = 255*(img_bn <= r**2)
     #img_bn = img_bn.astype(np.uint8)
-    img_bn = ((img_lab[:,:,1] < 100) & (img_lab[:,:,2] > 70) & (img_lab[:,:,2] < 170) )*255
+    img_bn = ((img_lab[:,:,1] < 107) & (img_lab[:,:,2] > 50) & (img_lab[:,:,2] < 170) )*255
     img_bn = img_bn.astype(np.uint8)
-    img_bn = cv2.erode(img_bn, None, iterations=2)
+    img_bn = cv2.erode(img_bn, None, iterations=3)
     img_bn = cv2.dilate(img_bn, None, iterations=3)
     #l_green = (144,200,144)
     #d_green = (10,238,10)
@@ -74,7 +74,8 @@ async def foto_grn():
     #img_bn = cv2.inRange(hsv_img,l_green,d_green)
     #_ = cv2.bitwise_and(img, img,mask=img_bn)
     xc,yc, area = foto_data(img_bn)
-
+    if xc == False or area < 200:
+        return False
     #cv2.imshow("orig", img)
     #img_cir = cv2.circle(img, (xc, yc), int((area/3.139)**0.5), (200,0,200),5)
     #cv2.imshow("bin", img_cir)
@@ -88,8 +89,7 @@ def foto_data(img_bn):
         xc = int(M["m10"]/M["m00"])
         yc = int(M["m01"]/M["m00"])
     else:
-        xc = None
-        yc = None
+        return False, False, False
     area = sum(sum(img_bn/255))
     return (xc, yc, area)
 
