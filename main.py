@@ -6,15 +6,20 @@ import asyncio
 import time
 import RPi.GPIO as GPIO
 
+
 async def main():
+    tipoCam = "qr"
     if not camara.cam.read()[0]:
         print("fallo al detectar camara")
         return False
-    constCam, varCam = control.defineVariablesControlCam()
+    constCam, varCam = control.defineVariablesControlCam(tipoCam)
     i=0
     while(True):
         i += 1
-        infoto = asyncio.create_task(camara.foto())
+        if tipoCam == "qr":
+            infoto = asyncio.create_task(camara.foto())
+        elif tipoCam == "grn":
+            infoto = asyncio.create_task(camara.foto_grn())
         rawDist = await sens.distSensores()
         dist, senMax = sens.adaData(rawDist)
         #print(dist)
@@ -27,7 +32,7 @@ async def main():
         else:
             vrCam = 0
             vlCam = 0
-        if senMax > 0.1 or qrInfo != False:
+        if senMax > 0.1 or qrInfo != False or vrCam > 5 or vlCam > 5:
             actuadores.enable_motors(GPIO.HIGH)
         else:
             actuadores.enable_motors(GPIO.LOW)
