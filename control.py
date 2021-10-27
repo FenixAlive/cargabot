@@ -14,8 +14,10 @@ def defineVariablesControlCam(como):
         },
         #varCam
         {
-            "wV": np.array([0.1, 0.05]),
-            "wW": np.array([0.53, .05, 0.0001]),
+            #"wV": np.array([0.1, 0.00005]),
+            "wV": np.array([0.05, 0.0005]),
+            #"wW": np.array([0.53, .05, 0.0001]),
+            "wW": np.array([0.1, .0005, 0.0001]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),
@@ -34,9 +36,11 @@ def defineVariablesControlCam(como):
         },
         #varCam
         {
-            "wV": np.array([0.083, 0.000003]),
+            #"wV": np.array([0.083, 0.000003]),
+            "wV": np.array([0.02, 0.00003]),
             #"wW": np.array([0., .0, 0.000]),
-            "wW": np.array([0.3, .0007, 0.0001]),
+            #"wW": np.array([0.3, .0007, 0.0001]),
+            "wW": np.array([0.09, .00007, 0.00001]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),
@@ -78,7 +82,7 @@ def controlSensores(dist):
             varSen = varSenMax
         elif dist[i] > varSen:
             varSen = dist[i]
-        vr += dist[i]*Kp_R[i]*9
-        vl += dist[i]*Kp_L[i]*9
+        vr += dist[i]*Kp_R[i]*7.5
+        vl += dist[i]*Kp_L[i]*7.5
     varSen = 1-(varSen-0)/(varSenMax-0)
     return [vr, vl, varSen]

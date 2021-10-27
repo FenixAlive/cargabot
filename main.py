@@ -8,7 +8,8 @@ import RPi.GPIO as GPIO
 
 
 async def main():
-    tipoCam = "qr"
+    # qr o grn
+    tipoCam = "grn"
     if not camara.cam.read()[0]:
         print("fallo al detectar camara")
         return False
