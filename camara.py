@@ -100,9 +100,9 @@ if __name__ == '__main__':
         #asyncio.run(foto())
         while(i < 100):
             i+=1
-            #ti=time.time()
+            ti=time.time()
             #asyncio.run(foto())
-            #asyncio.run(foto_grn())
+            asyncio.run(foto_grn())
             #print(asyncio.run(foto()))
-            #print(time.time()-ti)
+            print(time.time()-ti)
 

@@ -16,6 +16,7 @@ async def main():
     constCam, varCam = control.defineVariablesControlCam(tipoCam)
     i=0
     while(True):
+        ti = time.time()
         i += 1
         if tipoCam == "qr":
             infoto = asyncio.create_task(camara.foto())
@@ -43,6 +44,7 @@ async def main():
         #print(vl, vr)
         #print(vlCam, vrCam, vlSen, vrSen, vl, vr)
         actuadores.actua(vr, vl)
+        print(time.time()-ti)
 
 
 if __name__ == '__main__':

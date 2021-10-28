@@ -37,10 +37,10 @@ def defineVariablesControlCam(como):
         #varCam
         {
             #"wV": np.array([0.083, 0.000003]),
-            "wV": np.array([0.02, 0.00003]),
+            "wV": np.array([0.01, 0.00003]),
             #"wW": np.array([0., .0, 0.000]),
             #"wW": np.array([0.3, .0007, 0.0001]),
-            "wW": np.array([0.09, .00007, 0.00001]),
+            "wW": np.array([0.05, .00007, 0.00001]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),
