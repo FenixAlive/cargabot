@@ -43,7 +43,6 @@ def decodificarQrCV(img):
 
 
 async def foto_grn():
-    t = time.time()
     ok, img = cam.read()
     if not ok:
         return False
