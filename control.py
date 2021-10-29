@@ -1,10 +1,10 @@
 import time
 import numpy as np
 
-def defineVariablesControlCam(como):
-    if como == "qr":
-        varCam = [
-        #constCam
+def define_variables_control_cam(how):
+    if how == "qr":
+        cam_temp = [
+        #const_cam
         {
             "D": 0.15,
             "L": 0.11,
@@ -12,7 +12,7 @@ def defineVariablesControlCam(como):
             "centroDeseado": 640/2,
             "tamDeseado": 150,
         },
-        #varCam
+        #var_cam
         {
             #"wV": np.array([0.1, 0.00005]),
             "wV": np.array([0.05, 0.0005]),
@@ -24,9 +24,9 @@ def defineVariablesControlCam(como):
             "eAcum": 0,
         }
         ]
-    elif como == "grn":
-        varCam = [
-        #constCam
+    elif how == "grn":
+        cam_temp = [
+        #const_cam
         {
             "D": 0.15,
             "L": 0.11,
@@ -34,7 +34,7 @@ def defineVariablesControlCam(como):
             "centroDeseado": 640/2,
             "tamDeseado": 80,
         },
-        #varCam
+        #var_cam
         {
             #"wV": np.array([0.083, 0.000003]),
             "wV": np.array([0.01, 0.00003]),
@@ -47,30 +47,29 @@ def defineVariablesControlCam(como):
             "eAcum": 0,
         }
     ]
-    return varCam
+    return cam_temp
         
 
 
-def controlCamara(qrInfo, constCam, varCam):
-    centro, tam = qrInfo
-    #centro = qrInfo.left + qrInfo.width/2
-    errorV = constCam["tamDeseado"]-tam
-    errorW = constCam["centroDeseado"] - centro
-    varCam["e"] = np.array([errorV, errorW])
-    varCam["eAcum"]= varCam["eAcum"]+errorW
-    errorD = np.divide(varCam["e"]-varCam["eOld"], time.time()-varCam["tAnt"])
+def control_camera(cam_info, const_cam, var_cam):
+    centro, tam = cam_info
+    error_v = const_cam["tamDeseado"]-tam
+    error_w = const_cam["centroDeseado"] - centro
+    var_cam["e"] = np.array([error_v, error_w])
+    var_cam["eAcum"]= var_cam["eAcum"]+error_w
+    error_d = np.divide(var_cam["e"]-var_cam["eOld"], time.time()-var_cam["tAnt"])
     #salida de red
-    v = errorV * varCam["wV"][0] + errorD[0]*varCam["wV"][1]
-    w = errorW * varCam["wW"][0] + errorD[1]*varCam["wW"][1] +varCam["eAcum"]*varCam["wW"][2]
-    if abs(errorV) < 4:
+    v = error_v * var_cam["wV"][0] + error_d[0]*var_cam["wV"][1]
+    w = error_w * var_cam["wW"][0] + error_d[1]*var_cam["wW"][1] +var_cam["eAcum"]*var_cam["wW"][2]
+    if abs(error_v) < 4:
         v=0
     #velocidad ruedas
-    vr = (2*v + w*constCam["L"])/(2*constCam["R"])
-    vl = (2*v - w*constCam["L"])/(2*constCam["R"])
-    return [vr, vl, varCam]
+    vr = (2*v + w*const_cam["L"])/(2*const_cam["R"])
+    vl = (2*v - w*const_cam["L"])/(2*const_cam["R"])
+    return [vr, vl, var_cam]
 
 
-def controlSensores(dist):
+def control_sensors(dist):
     varSenMax = 0.75
     Kp_R = [16, -6, -8, 12, 6, -5]
     Kp_L = [-8, -6, 16, -5, 6, 12]

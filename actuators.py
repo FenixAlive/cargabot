@@ -32,8 +32,8 @@ for i in range(0,2):
 
 
 #setup pins for direction in H bridge
-def actua(vr, vl):
-    tope = 80
+def move(vr, vl):
+    safe_duty = 90
     v = [vr, vl]
     for i in range(0,2):
         if v[i] > 0:
@@ -43,23 +43,22 @@ def actua(vr, vl):
             GPIO.output(direction[i][0], GPIO.LOW)
             GPIO.output(direction[i][1], GPIO.HIGH)
             v[i] = abs(v[i])
-
-        if v[i] > tope:
-            v[i] = tope
+        if v[i] > safe_duty:
+            v[i] = safe_duty
         pwm[i].ChangeDutyCycle(v[i])
 
 def enable_motors(val):
     GPIO.output(enable_pin, val)
 
 
-def verActua(vr, vl, sens, qrInfo):
+def watch_moving(vr, vl, sens, img_info):
     os.system("clear")
     print("")
-    print("  |{:.2f}| |{:.2f}| |{:.2f}| |{:.2f}|".format(sens[3], sens[2], sens[1], sens[0]))
+    print("  |{:.2f}| |{:.2f}| |{:.2f}|".format(sens[2], sens[1], sens[0]))
     print("")
     if qrInfo != False:
         print("")
-        print(qrInfo)
+        print(img_info)
         print("")
         print("           |--o--|")
     else:
@@ -72,7 +71,7 @@ def verActua(vr, vl, sens, qrInfo):
     print("           |-----|")
     print("    |{:2.2f}|-|-----|-|{:2.2f}|".format(vl,vr))
     print("")
-    print("    |{:.2f}| |{:.2f}| |{:.2f}| |{:.2f}]|".format(sens[4], sens[5], sens[6], sens[7]))
+    print("    |{:.2f}| |{:.2f}| |{:.2f}|".format(sens[3], sens[4], sens[5]))
     print("")
 
 if __name__ == '__main__':
