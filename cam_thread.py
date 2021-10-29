@@ -4,10 +4,12 @@ import numpy as np
 from pyzbar.pyzbar import decode
 
 class Camera(object):
-    def __init__(self, src=0):
+    def __init__(self, src=0, width=640, height=480):
         self.capture=cv2.VideoCapture(src)
-        self.width = 640
-        self.height = 480
+        self.width = width
+        self.height = height
+        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         #start thread to read frames from video stream
         self.thread = Thread(target=self.update, args=())
         self.thread.daemon=True
@@ -45,12 +47,14 @@ class Camera(object):
 
     def foto_grn(self):
         img_lab = cv2.cvtColor(self.frame, cv2.COLOR_BGR2LAB)
-        img_bn = ((img_lab[:,:,1] < 113) & (img_lab[:,:,2] > 70) & (img_lab[:,:,2] < 190) )*255
+        img_bn = ((img_lab[:,:,0] < 180) & (img_lab[:,:,0] > 40 ) & (img_lab[:,:,1] < 120) & (img_lab[:,:,2] > 127) & (img_lab[:,:,2] < 170) )*255
         img_bn = img_bn.astype(np.uint8)
-        img_bn = cv2.erode(img_bn, None, iterations=3)
-        img_bn = cv2.dilate(img_bn, None, iterations=3) 
+        img_bn = cv2.erode(img_bn, None, iterations=1)
+        img_bn = cv2.dilate(img_bn, None, iterations=1) 
+        #cv2.imshow('img_lab', img_lab[:,:,0])
+        #cv2.imshow('img_bn', img_bn)
+        #cv2.waitKey(1)
         xc,yc, area = self.foto_data(img_bn)
-        print(area)
         if xc == False or area < 100:
             return False
         return (xc,2*(area/3.139)**0.5)
@@ -74,7 +78,7 @@ class Camera(object):
 
 
 if __name__ == '__main__':
-    video = Camara()
+    video = Camera(width=320, height=240)
     while True:
         try:
             #video.show_frame()
