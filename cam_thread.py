@@ -47,7 +47,7 @@ class Camera(object):
 
     def foto_grn(self):
         img_lab = cv2.cvtColor(self.frame, cv2.COLOR_BGR2LAB)
-        img_bn = ((img_lab[:,:,0] < 180) & (img_lab[:,:,0] > 40 ) & (img_lab[:,:,1] < 120) & (img_lab[:,:,2] > 127) & (img_lab[:,:,2] < 170) )*255
+        img_bn = ((img_lab[:,:,0] < 255) & (img_lab[:,:,0] > 0) & ((img_lab[:,:,1] < 100) & (img_lab[:,:,1] > 0)) & (img_lab[:,:,2] < 160) & (img_lab[:,:,2] > 100) )*255
         img_bn = img_bn.astype(np.uint8)
         img_bn = cv2.erode(img_bn, None, iterations=1)
         img_bn = cv2.dilate(img_bn, None, iterations=1) 

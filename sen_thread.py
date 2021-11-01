@@ -5,6 +5,7 @@ except:
 import time
 import numpy as np
 import asyncio
+from threading import Thread
 
 
 class Sensors(object):
@@ -21,14 +22,15 @@ class Sensors(object):
         self.echo = [17,22,9,5,26,20]
         try:
             GPIO.setmode(GPIO.BCM)
-            for i in range(len(trig)):
+            for i in range(self.nSen):
                 GPIO.setup(self.trig[i], GPIO.OUT)
                 GPIO.setup(self.echo[i], GPIO.IN)
             #start thread to read frames from video stream
             self.thread = Thread(target=self.update, args=())
             self.thread.daemon=True
             self.thread.start()
-        except:
+        except Exception as e:
+            print(e)
             self.dist = [0,0,0,0,0,0]
 
 
@@ -36,6 +38,7 @@ class Sensors(object):
         #read the next frame from the stream in other thread
         while True:
             self.dist = asyncio.run(self.distSensors())
+            #print(self.dist)
 
     #take data from especific sensor
     async def readSen(self, utrig, uecho):
@@ -49,21 +52,21 @@ class Sensors(object):
         while GPIO.input(uecho) == 0:
             await asyncio.sleep(0)
             if(time.time()-ti > 0.01): 
-                return disMax
+                return self.disMax
         t_start = time.time()
         while GPIO.input(uecho) == 1:
             await asyncio.sleep(0)
             if(time.time()-t_start > 0.01): 
-                return disMax
+                return self.disMax
         return (343/2)*(time.time()-t_start)
 
 
     async def distSensors(self):
         tdata = []
-        for i in range(nSen):
+        for i in range(self.nSen):
             tdata.append(asyncio.create_task(self.readSen(self.trig[i], self.echo[i])))
         tdata = await asyncio.gather(*tdata)
-        for i in range(nSen):
+        for i in range(self.nSen):
             if tdata[i] < self.disMax and tdata[i] > self.disMin:
                 tdata[i] = 1-(tdata[i]-self.disMin)/(self.disMax-self.disMin)
             elif tdata[i] < self.disMin:

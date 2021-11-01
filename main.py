@@ -23,7 +23,7 @@ class Main(object):
 
 
     def update_cam(self):
-        self.camera = Camera(width=320, height=240)
+        self.camera = Camera(width=640, height=480)
         if self.cam_type == 'grn':
             while True:
                 try:
@@ -68,7 +68,7 @@ class Main(object):
                         actuators.enable_motors(GPIO.HIGH)
                     else:
                         actuators.enable_motors(GPIO.LOW)
-                    actuators.actua(vr, vl)
+                    actuators.move(vr, vl)
                 except:
                     print("error al actuar")
             except AttributeError:
