@@ -14,12 +14,10 @@ def define_variables_control_cam(how):
         },
         #var_cam
         {
-            #"wV": np.array([0.1, 0.00005]),
-            "wV": np.array([0.05, 0.0005]),
-            #"wW": np.array([0.53, .05, 0.0001]),
-            "wW": np.array([0.1, .0005, 0.0001]),
-            "e": np.array([0.001, 0.001]),
-            "eOld": np.array([0.001, 0.001]),
+            "wV": np.array([0.1, 0.0005]),
+            "wW": np.array([0.4, .001, 0.000]),
+            "e": np.array([0.00, 0.00]),
+            "eOld": np.array([0.00, 0.00]),
             "tAnt": time.time(),
             "eAcum": 0,
         }
@@ -36,11 +34,9 @@ def define_variables_control_cam(how):
         },
         #var_cam
         {
-            #"wV": np.array([0.083, 0.000003]),
-            "wV": np.array([0.01, 0.00003]),
+            "wV": np.array([0.083, 0.000003]),
             #"wW": np.array([0., .0, 0.000]),
-            #"wW": np.array([0.3, .0007, 0.0001]),
-            "wW": np.array([0.05, .00007, 0.00001]),
+            "wW": np.array([0.3, .0007, 0.0001]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),
@@ -52,7 +48,10 @@ def define_variables_control_cam(how):
 
 
 def control_camera(cam_info, const_cam, var_cam):
-    centro, tam = cam_info
+    if cam_info != False:
+        centro, tam = cam_info
+    else:
+        return (0, 0, var_cam)
     error_v = const_cam["tamDeseado"]-tam
     error_w = const_cam["centroDeseado"] - centro
     var_cam["e"] = np.array([error_v, error_w])
@@ -61,7 +60,7 @@ def control_camera(cam_info, const_cam, var_cam):
     #salida de red
     v = error_v * var_cam["wV"][0] + error_d[0]*var_cam["wV"][1]
     w = error_w * var_cam["wW"][0] + error_d[1]*var_cam["wW"][1] +var_cam["eAcum"]*var_cam["wW"][2]
-    if abs(error_v) < 4:
+    if abs(error_v) < 2.5:
         v=0
     #velocidad ruedas
     vr = (2*v + w*const_cam["L"])/(2*const_cam["R"])

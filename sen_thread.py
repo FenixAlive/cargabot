@@ -38,6 +38,7 @@ class Sensors(object):
         #read the next frame from the stream in other thread
         while True:
             self.dist = asyncio.run(self.distSensors())
+            self.ada_dist, self.sen_max = self.adaData()
             #print(self.dist)
 
     #take data from especific sensor
@@ -98,6 +99,7 @@ if __name__ == '__main__':
     sensors = Sensors()
     while True:
         try:
-            print(sensors.adaData())
+            print(sensors.dist)
+            print(sensors.ada_dist)
         except AttributeError:
             pass

@@ -47,17 +47,29 @@ class Camera(object):
 
     def foto_grn(self):
         img_lab = cv2.cvtColor(self.frame, cv2.COLOR_BGR2LAB)
-        img_bn = ((img_lab[:,:,0] < 255) & (img_lab[:,:,0] > 0) & ((img_lab[:,:,1] < 100) & (img_lab[:,:,1] > 0)) & (img_lab[:,:,2] < 160) & (img_lab[:,:,2] > 100) )*255
+        img_bn = ((img_lab[:,:,0] > 30) & (img_lab[:,:,0] < 250) & ((img_lab[:,:,1] > 0) & (img_lab[:,:,1] < 110)) & (img_lab[:,:,2] > 120) & (img_lab[:,:,2] < 190))*255
         img_bn = img_bn.astype(np.uint8)
         img_bn = cv2.erode(img_bn, None, iterations=1)
-        img_bn = cv2.dilate(img_bn, None, iterations=1) 
-        #cv2.imshow('img_lab', img_lab[:,:,0])
-        #cv2.imshow('img_bn', img_bn)
-        #cv2.waitKey(1)
+        img_bn = cv2.dilate(img_bn, None, iterations=3) 
+        cv2.imshow('img_bn', img_bn)
+        key = cv2.waitKey(0)
         xc,yc, area = self.foto_data(img_bn)
         if xc == False or area < 100:
             return False
         return (xc,2*(area/3.139)**0.5)
+
+
+    def cal_foto(self, kind, channel, min_val, max_val):
+        img_lab = cv2.cvtColor(self.frame, kind)
+        img_bn = ((img_lab[:,:,channel] > min_val) & (img_lab[:,:,channel] < max_val))*255
+        img_bn = img_bn.astype(np.uint8)
+        cv2.imshow('img_lab'+str(channel), img_lab[:,:,channel])
+        cv2.imshow('img_bn', img_bn)
+        key = cv2.waitKey(0)
+        if key == ord('q'):
+            self.capture.release()
+            cv2.destroyAllWindows()
+            exit(1)
 
 
     def foto(self):
@@ -79,9 +91,15 @@ class Camera(object):
 
 if __name__ == '__main__':
     video = Camera(width=320, height=240)
+    i = 0
     while True:
         try:
-            #video.show_frame()
+            #video.cal_foto(cv2.COLOR_BGR2LAB,1,0,110)
             print(video.foto_grn())
+            if i > 9:
+                break
+            i = i+1
+            #video.show_frame()
+            #print(video.foto_grn())
         except AttributeError:
             pass

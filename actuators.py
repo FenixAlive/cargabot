@@ -77,7 +77,7 @@ def watch_moving(vr, vl, sens, img_info):
 if __name__ == '__main__':
     GPIO.output(enable_pin, GPIO.HIGH)
     for i in range(-100,101):
-        actua(i,i)
+        move(i,i)
         print(i,i)
         time.sleep(0.1)
 
