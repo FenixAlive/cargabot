@@ -34,9 +34,9 @@ def define_variables_control_cam(how):
         },
         #var_cam
         {
-            "wV": np.array([0.083, 0.000003]),
+            "wV": np.array([0.1, 0.00005]),
             #"wW": np.array([0., .0, 0.000]),
-            "wW": np.array([0.3, .0007, 0.0001]),
+            "wW": np.array([0.3, .001, 0.000]),
             "e": np.array([0.001, 0.001]),
             "eOld": np.array([0.001, 0.001]),
             "tAnt": time.time(),

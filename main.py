@@ -11,7 +11,7 @@ from sen_thread import Sensors
 
 
 class Main(object):
-    def __init__(self, cam_type='grn'):    
+    def __init__(self, cam_type='qr'):    
         self.sensors = Sensors()
         self.cam_type = cam_type
         self.const_cam, self.var_cam = control.define_variables_control_cam(cam_type)

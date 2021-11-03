@@ -47,12 +47,12 @@ class Camera(object):
 
     def foto_grn(self):
         img_lab = cv2.cvtColor(self.frame, cv2.COLOR_BGR2LAB)
-        img_bn = ((img_lab[:,:,0] > 30) & (img_lab[:,:,0] < 250) & ((img_lab[:,:,1] > 0) & (img_lab[:,:,1] < 110)) & (img_lab[:,:,2] > 120) & (img_lab[:,:,2] < 190))*255
+        img_bn = ((img_lab[:,:,0] > 30) & (img_lab[:,:,0] < 220) & ((img_lab[:,:,1] > 0) & (img_lab[:,:,1] < 95)) & (img_lab[:,:,2] > 120) & (img_lab[:,:,2] < 190))*255
         img_bn = img_bn.astype(np.uint8)
         img_bn = cv2.erode(img_bn, None, iterations=1)
         img_bn = cv2.dilate(img_bn, None, iterations=3) 
-        cv2.imshow('img_bn', img_bn)
-        key = cv2.waitKey(0)
+        #cv2.imshow('img_bn', img_bn)
+        #key = cv2.waitKey(0)
         xc,yc, area = self.foto_data(img_bn)
         if xc == False or area < 100:
             return False
@@ -96,8 +96,8 @@ if __name__ == '__main__':
         try:
             #video.cal_foto(cv2.COLOR_BGR2LAB,1,0,110)
             print(video.foto_grn())
-            if i > 9:
-                break
+            #if i > 9:
+                #break
             i = i+1
             #video.show_frame()
             #print(video.foto_grn())
