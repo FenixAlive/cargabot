@@ -59,13 +59,27 @@ class Camera(object):
         return (xc,2*(area/3.139)**0.5)
 
 
+    def photo_hsv(self):
+        hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
+        lower = np.array([50,100,50])
+        upper = np.array([80,200,150])
+        mask = cv2.inRange(hsv, lower, upper)
+        mask = cv2.erode(mask, None, iterations=1)
+        mask = cv2.dilate(mask, None, iterations=2) 
+        #cv2.imshow('mask', mask)
+        #key = cv2.waitKey(1)
+        xc,yc, area = self.foto_data(mask)
+        if xc == False or area < 100:
+            return False
+        return (xc,2*(area/3.139)**0.5)
+
     def cal_foto(self, kind, channel, min_val, max_val):
-        img_lab = cv2.cvtColor(self.frame, kind)
-        img_bn = ((img_lab[:,:,channel] > min_val) & (img_lab[:,:,channel] < max_val))*255
+        img = cv2.cvtColor(self.frame, kind)
+        img_bn = ((img[:,:,channel] > min_val) & (img[:,:,channel] < max_val))*255
         img_bn = img_bn.astype(np.uint8)
-        cv2.imshow('img_lab'+str(channel), img_lab[:,:,channel])
+        cv2.imshow('img'+str(channel), img[:,:,channel])
         cv2.imshow('img_bn', img_bn)
-        key = cv2.waitKey(0)
+        key = cv2.waitKey(1)
         if key == ord('q'):
             self.capture.release()
             cv2.destroyAllWindows()
@@ -90,12 +104,14 @@ class Camera(object):
 
 
 if __name__ == '__main__':
-    video = Camera(width=320, height=240)
+    video = Camera(width=640, height=480)
     i = 0
     while True:
         try:
-            #video.cal_foto(cv2.COLOR_BGR2LAB,1,0,110)
-            print(video.foto_grn())
+            #video.cal_foto(cv2.COLOR_BGR2HSV,2,50,150)
+            ti = time.time()
+            print(video.photo_hsv())
+            print(time.time()-ti)
             #if i > 9:
                 #break
             i = i+1
