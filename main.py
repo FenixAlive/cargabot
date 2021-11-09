@@ -11,7 +11,7 @@ from sen_thread import Sensors
 
 
 class Main(object):
-    def __init__(self, cam_type='qr'):    
+    def __init__(self, cam_type='grn'):    
         self.sensors = Sensors()
         self.cam_type = cam_type
         self.const_cam, self.var_cam = control.define_variables_control_cam(cam_type)
@@ -25,13 +25,11 @@ class Main(object):
         if self.cam_type == 'grn':
             while True:
                 try:
-                    ti=time.time()
                     self.cam_info = self.camera.photo_hsv()
-                    print(time.time()-ti)
                 except AttributeError:
                     print("AttributeError on update_cam grn main")
                     self.cam_info = False
-                time.sleep(0.01)
+                time.sleep(0.005)
         elif self.cam_type == 'qr':
             while True:
                 try:
@@ -50,7 +48,7 @@ class Main(object):
                 vr_sen, vl_sen, var_sen = control.control_sensors(self.sensors.ada_dist)
                 vr = vr_cam*var_sen + vr_sen
                 vl = vl_cam*var_sen + vl_sen
-                print("hasta aqui")
+                #print("hasta aqui")
                 try:
                     if self.sensors.sen_max > 0.1 or self.cam_info != False or abs(vr_cam) > 3 or abs(vl_cam) > 3 or abs(vl_sen) > 4 or abs(vr_sen) > 4:
                         actuators.enable_motors(GPIO.HIGH)
@@ -67,5 +65,5 @@ class Main(object):
 
 
 if __name__ == '__main__':
-    main = Main(cam_type="grn")
+    main = Main(cam_type="qr")
     main.run()

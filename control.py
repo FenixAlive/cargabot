@@ -10,12 +10,12 @@ def define_variables_control_cam(how):
             "L": 0.11,
             "R": 0.085,
             "centroDeseado": 640/2,
-            "tamDeseado": 150,
+            "tamDeseado": 130,
         },
         #var_cam
         {
-            "wV": np.array([0.1, 0.0005]),
-            "wW": np.array([0.4, .001, 0.000]),
+            "wV": np.array([0.17, 0.0005]),
+            "wW": np.array([0.37, .003, 0.000]),
             "e": np.array([0.00, 0.00]),
             "eOld": np.array([0.00, 0.00]),
             "tAnt": time.time(),
@@ -35,10 +35,9 @@ def define_variables_control_cam(how):
         #var_cam
         {
             "wV": np.array([0.1, 0.00005]),
-            #"wW": np.array([0., .0, 0.000]),
-            "wW": np.array([0.3, .001, 0.000]),
-            "e": np.array([0.001, 0.001]),
-            "eOld": np.array([0.001, 0.001]),
+            "wW": np.array([0.35, .003, 0.000]),
+            "e": np.array([0.00, 0.00]),
+            "eOld": np.array([0.00, 0.00]),
             "tAnt": time.time(),
             "eAcum": 0,
         }

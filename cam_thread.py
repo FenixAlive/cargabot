@@ -61,17 +61,21 @@ class Camera(object):
 
     def photo_hsv(self):
         hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
-        lower = np.array([50,100,50])
-        upper = np.array([80,200,150])
+        lower = np.array([43,70,70])
+        upper = np.array([69,255,250])
         mask = cv2.inRange(hsv, lower, upper)
-        mask = cv2.erode(mask, None, iterations=1)
+        mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2) 
         #cv2.imshow('mask', mask)
-        #key = cv2.waitKey(1)
+        #key = cv2.waitKey(0)
+        #if key == ord('q'):
+        #    self.capture.release()
+        #    cv2.destroyAllWindows()
+        #    exit(1)
         xc,yc, area = self.foto_data(mask)
         if xc == False or area < 100:
             return False
-        return (xc,2*(area/3.139)**0.5)
+        return (xc,2*(area/3.1416)**0.5)
 
     def cal_foto(self, kind, channel, min_val, max_val):
         img = cv2.cvtColor(self.frame, kind)
@@ -79,7 +83,7 @@ class Camera(object):
         img_bn = img_bn.astype(np.uint8)
         cv2.imshow('img'+str(channel), img[:,:,channel])
         cv2.imshow('img_bn', img_bn)
-        key = cv2.waitKey(1)
+        key = cv2.waitKey(0)
         if key == ord('q'):
             self.capture.release()
             cv2.destroyAllWindows()
@@ -108,12 +112,12 @@ if __name__ == '__main__':
     i = 0
     while True:
         try:
-            #video.cal_foto(cv2.COLOR_BGR2HSV,2,50,150)
-            ti = time.time()
+            #video.cal_foto(cv2.COLOR_BGR2HSV,1,66,160)
+            
             print(video.photo_hsv())
-            print(time.time()-ti)
-            #if i > 9:
-                #break
+            if i > 2:
+                cv2.imwrite("test2.jpg",video.frame )
+                break
             i = i+1
             #video.show_frame()
             #print(video.foto_grn())
