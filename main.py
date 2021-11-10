@@ -58,12 +58,12 @@ class Main(object):
                 except Exception as e:
                     print("error al actuar", e)
             except AttributeError:
-                #print("AttributeError on main run")
+                print("AttributeError on main run")
                 pass
             #print(time.time()-ti)
 
 
 
 if __name__ == '__main__':
-    main = Main(cam_type="qr")
+    main = Main(cam_type="grn")
     main.run()
