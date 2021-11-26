@@ -32,20 +32,20 @@ for i in range(0,2):
 
 
 #setup pins for direction in H bridge
-def move(vr, vl):
+def move(wr, wl):
     safe_duty = 90
-    v = [vr, vl]
+    w = [wr, wl]
     for i in range(0,2):
-        if v[i] > 0:
+        if w[i] > 0:
             GPIO.output(direction[i][0], GPIO.HIGH)
             GPIO.output(direction[i][1], GPIO.LOW)
         else:
             GPIO.output(direction[i][0], GPIO.LOW)
             GPIO.output(direction[i][1], GPIO.HIGH)
-            v[i] = abs(v[i])
-        if v[i] > safe_duty:
-            v[i] = safe_duty
-        pwm[i].ChangeDutyCycle(v[i])
+            w[i] = abs(w[i])
+        if w[i] > safe_duty:
+            w[i] = safe_duty
+        pwm[i].ChangeDutyCycle(w[i])
 
 def enable_motors(val):
     GPIO.output(enable_pin, val)

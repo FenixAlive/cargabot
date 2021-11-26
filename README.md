@@ -1,9 +1,11 @@
-# cargabot
+# Código del Proyecto Modular de la carrera de Ingenieria Robótica de la Universidad de Guadalajara 
+# Robot Móvil Tipo Skid Steer asistente de carga mediante seguimiento
 
-Requiere las siguientes dependencias de Python para la camara:
-opencv
+# Requiere las siguientes dependencias de Python 3 para correr:
+opencv-python
 numpy
 pyzbar
+RPi.GPIO
 
-#para correr la camara pixman hacer un preload
-LD_PRELOAD=/usr/lib/arm-linux-gnueabihf/libv4l/v4l1compat.so python3 modular/camara.py
+#Requiere conectar una camara web y conecciones a GPIO para el control de los sensores y los motores
+

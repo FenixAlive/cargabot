@@ -62,9 +62,9 @@ def control_camera(cam_info, const_cam, var_cam):
     if abs(error_v) < 2.5:
         v=0
     #velocidad ruedas
-    vr = (2*v + w*const_cam["L"])/(2*const_cam["R"])
-    vl = (2*v - w*const_cam["L"])/(2*const_cam["R"])
-    return [vr, vl, var_cam]
+    wr = (2*v + w*const_cam["L"])/(2*const_cam["R"])
+    wl = (2*v - w*const_cam["L"])/(2*const_cam["R"])
+    return [wr, wl, var_cam]
 
 
 def control_sensors(dist):
@@ -72,14 +72,14 @@ def control_sensors(dist):
     Kp_R = [16, -6, -8, 12, 6, -5]
     Kp_L = [-8, -6, 16, -5, 6, 12]
     varSen = 0
-    vr = 0
-    vl = 0
+    wr = 0
+    wl = 0
     for i in range(len(dist)):
         if dist[i] > varSenMax:
             varSen = varSenMax
         elif dist[i] > varSen:
             varSen = dist[i]
-        vr += dist[i]*Kp_R[i]*7.5
-        vl += dist[i]*Kp_L[i]*7.5
+        wr += dist[i]*Kp_R[i]*7.5
+        wl += dist[i]*Kp_L[i]*7.5
     varSen = 1-(varSen-0)/(varSenMax-0)
-    return [vr, vl, varSen]
+    return [wr, wl, varSen]
